@@ -24,4 +24,20 @@ public class CategoryController {
     public List<CategoryResponseDto> getCategory() {
         return categoryService.getAllCategories();
     }
+
+    @GetMapping("/{categoryId}")
+    public CategoryResponseDto getCategoryById(@PathVariable String categoryId) {
+        return categoryService.getCategoryById(categoryId);
+    }
+
+    @PutMapping("/{categoryId}")
+    public CategoryRequestDto updateCategory(@PathVariable String categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
+        return categoryService.updateCategory(categoryId, categoryRequestDto);
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public String deleteCategory(@PathVariable String categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return "Category deleted successfully of ID " + categoryId;
+    }
 }

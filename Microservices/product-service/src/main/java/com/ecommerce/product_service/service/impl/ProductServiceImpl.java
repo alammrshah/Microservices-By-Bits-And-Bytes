@@ -42,8 +42,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductRequestDto getProductById(Long productId) {
-        return null;
+    public ProductResponseDto getProductById(String productId) {
+        Product product =  productRepository.getById(productId);
+        if (product == null) {
+            throw new NoSuchElementException("Product not found with id: " + productId);
+        }
+        ProductResponseDto productResponseDto = convertToDto(product);
+        return productResponseDto;
     }
 
     @Override
@@ -61,7 +66,14 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         return convertToDto(savedProduct);
     }
-    
+
+    @Override
+    public void deleteProduct(String productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Product not found with id: " + productId));
+        productRepository.delete(product);
+    }
+
     /**
      * Converts a Product entity to a ProductRequestDto
      * @param product the Product entity to convert

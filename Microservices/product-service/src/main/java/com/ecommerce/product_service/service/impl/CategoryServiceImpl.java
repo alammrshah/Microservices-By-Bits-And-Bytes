@@ -27,11 +27,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryRequestDto updateCategory(String categoryId, CategoryRequestDto categoryRequestDto) {
-        return null;
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+        category.setName(categoryRequestDto.getName());
+        category.setDescription(categoryRequestDto.getDescription());
+        Category updatedCategory = categoryRepository.save(category);
+        return CategoryMapping.toCategoryRequestDto(updatedCategory);
     }
 
     @Override
     public void deleteCategory(String categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+        categoryRepository.delete(category);
+        // Optionally, you can return a response or void if deletion is successful
 
     }
 
@@ -45,6 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto getCategoryById(String categoryId) {
-        return null;
-    }
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+    return CategoryMapping.toCategoryResponseDto(category);}
 }
